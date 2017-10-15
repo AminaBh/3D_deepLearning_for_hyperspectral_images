@@ -1,1 +1,3 @@
 
+Here, we share the caffemodel that contains the learnt weights for the 1D 6 layers network. 
+The Network was trained using the Pavia University dataset based on 1*1 spatial neighborhood for each input voxel.
