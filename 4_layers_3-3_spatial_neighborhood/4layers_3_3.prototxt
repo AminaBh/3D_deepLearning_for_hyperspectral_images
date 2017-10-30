@@ -1,0 +1,330 @@
+
+name: "sae_trial_fineTuning"
+#source: data.txt source file ( data blocks of shape 3*3*number of spectral channels)
+# HDF5 INPUT DATA LAYER :
+layer {
+          name: "data"
+          type: "HDF5Data"
+          top: "data"
+          top: "label"
+          hdf5_data_param {
+              source: ""
+              batch_size: 3
+          }
+          
+          include {
+              phase: 0
+          }
+}
+# HDF5 INPUT DATA LAYER :
+layer {
+          name: "data"
+          type: "HDF5Data"
+          top: "data"
+          top: "label"
+          hdf5_data_param {
+              source: ""
+              batch_size: 3
+          }
+          
+          include {
+              phase: 1
+          }
+}
+# (De)CONVOLUTIONNAL LAYER :
+#input  is n * c_i * h_i * w_i
+#output is n * c_o * h_o * w_o, where h_o = (h_i + 2 * pad_h - kernel_h) / stride_h + 1 and w_o likewise.
+layer {
+          name: "conv1"
+          type: "Convolution"
+          bottom: "data"
+          top: "conv1"
+          param {
+              name: "conv1_w"
+              # learning rate multiplier for the filters
+              lr_mult:    1
+              # weight decay multiplier for the filters
+              decay_mult: 1    
+          }
+          param {
+              name: "conv1_b"
+              # learning rate multiplier for the biases
+              lr_mult:    2    
+              # weight decay multiplier for the biases
+              decay_mult: 0    
+          }
+          convolution_param {
+              # learn 20 filters
+              num_output: 20
+              #kernel_size: (3, 3, 3)
+              kernel_size: 3
+              kernel_size: 3
+              kernel_size: 3
+              # step [1 1 1] pixels between each filter application
+              stride: 1
+              stride: 1
+              stride: 1
+              # padding: [0 0 1]
+              pad: 0
+              pad: 0
+              pad: 1
+              # initialize the filters from given distribution model
+              
+                 weight_filler{
+                      type: "msra"
+                }
+              # initialize the biases to zero
+              bias_filler {
+                    type: "constant" 
+                    value: 0
+              }
+         }
+         
+}
+
+# LAYER NON LINEARITY
+layer {
+          name: "conv1_relu"
+          type: "ReLU"
+          bottom: "conv1"
+          top: "conv1"
+          
+
+}
+
+# (De)CONVOLUTIONNAL LAYER :
+#input  is n * c_i * h_i * w_i
+#output is n * c_o * h_o * w_o, where h_o = (h_i + 2 * pad_h - kernel_h) / stride_h + 1 and w_o likewise.
+layer {
+          name: "conv2"
+          type: "Convolution"
+          bottom: "conv1"
+          top: "conv2"
+          param {
+              name: "conv2_w"
+              # learning rate multiplier for the filters
+              lr_mult:    1
+              # weight decay multiplier for the filters
+              decay_mult: 1    
+          }
+          param {
+              name: "conv2_b"
+              # learning rate multiplier for the biases
+              lr_mult:    2    
+              # weight decay multiplier for the biases
+              decay_mult: 0    
+          }
+          convolution_param {
+              # learn 2 filters
+              num_output: 2
+              #kernel_size: (1, 1, 3)
+              kernel_size: 1
+              kernel_size: 1
+              kernel_size: 3
+              # step [1 1 2] pixels between each filter application
+              stride: 1
+              stride: 1
+              stride: 2
+              # padding: [0 0 1]
+              pad: 0
+              pad: 0
+              pad: 1
+              # initialize the filters from given distribution model
+              
+                 weight_filler{
+                      type: "msra"
+                }
+              # initialize the biases to zero
+              bias_filler {
+                    type: "constant" 
+                    value: 0
+              }
+         }
+         
+}
+
+# LAYER NON LINEARITY
+layer {
+          name: "conv2_relu"
+          type: "ReLU"
+          bottom: "conv2"
+          top: "conv2"
+          
+
+}
+
+# (De)CONVOLUTIONNAL LAYER :
+#input  is n * c_i * h_i * w_i
+#output is n * c_o * h_o * w_o, where h_o = (h_i + 2 * pad_h - kernel_h) / stride_h + 1 and w_o likewise.
+layer {
+          name: "conv3"
+          type: "Convolution"
+          bottom: "conv2"
+          top: "conv3"
+          param {
+              name: "conv3_w"
+              # learning rate multiplier for the filters
+              lr_mult:    1
+              # weight decay multiplier for the filters
+              decay_mult: 1    
+          }
+          param {
+              name: "conv3_b"
+              # learning rate multiplier for the biases
+              lr_mult:    2    
+              # weight decay multiplier for the biases
+              decay_mult: 0    
+          }
+          convolution_param {
+              # learn 35 filters
+              num_output: 35
+              #kernel_size: (1, 1, 3)
+              kernel_size: 1
+              kernel_size: 1
+              kernel_size: 3
+              # step [1 1 1] pixels between each filter application
+              stride: 1
+              stride: 1
+              stride: 1
+              # padding: [0 0 1]
+              pad: 0
+              pad: 0
+              pad: 1
+              # initialize the filters from given distribution model
+              
+                 weight_filler{
+                      type: "msra"
+                }
+              # initialize the biases to zero
+              bias_filler {
+                    type: "constant" 
+                    value: 0
+              }
+         }
+         
+}
+
+# LAYER NON LINEARITY
+layer {
+          name: "conv3_relu"
+          type: "ReLU"
+          bottom: "conv3"
+          top: "conv3"
+          
+
+}
+
+# (De)CONVOLUTIONNAL LAYER :
+#input  is n * c_i * h_i * w_i
+#output is n * c_o * h_o * w_o, where h_o = (h_i + 2 * pad_h - kernel_h) / stride_h + 1 and w_o likewise.
+layer {
+          name: "conv4"
+          type: "Convolution"
+          bottom: "conv3"
+          top: "conv4"
+          param {
+              name: "conv4_w"
+              # learning rate multiplier for the filters
+              lr_mult:    1
+              # weight decay multiplier for the filters
+              decay_mult: 1    
+          }
+          param {
+              name: "conv4_b"
+              # learning rate multiplier for the biases
+              lr_mult:    2    
+              # weight decay multiplier for the biases
+              decay_mult: 0    
+          }
+          convolution_param {
+              # learn 2 filters
+              num_output: 2
+              #kernel_size: (1, 1, 2)
+              kernel_size: 1
+              kernel_size: 1
+              kernel_size: 2
+              # step [1 1 2] pixels between each filter application
+              stride: 1
+              stride: 1
+              stride: 2
+              # padding: [0 0 1]
+              pad: 0
+              pad: 0
+              pad: 1
+              # initialize the filters from given distribution model
+              
+                 weight_filler{
+                      type: "msra"
+                }
+              # initialize the biases to zero
+              bias_filler {
+                    type: "constant" 
+                    value: 0
+              }
+         }
+         
+}
+
+# LAYER NON LINEARITY
+layer {
+          name: "conv4_relu"
+          type: "ReLU"
+          bottom: "conv4"
+          top: "conv4"
+          
+
+}
+
+# FULLY CONNECTED LAYER :
+layer {
+          name: "fc5"
+          type: "InnerProduct"
+          bottom: "conv4"
+          top: "fc5"
+          param {
+              name: "fc5_w"
+              lr_mult:    1
+              decay_mult: 1
+          }
+          param {
+              name: "fc5_b"
+              lr_mult:    2
+              decay_mult: 0
+          }
+          inner_product_param {
+                num_output: 9
+                
+                 weight_filler{
+                      type: "msra"
+                }
+                bias_filler {
+                      type: "constant"
+                      value: 0
+                }
+          }
+          
+}
+
+
+# SOFTMAX LOSS LAYER
+layer {
+          name: "loss"
+          type: "SoftmaxWithLoss"
+          bottom: "fc5"
+          bottom: "label"
+          top: "loss"
+          loss_weight: 1
+          
+}
+# ACCURACY LAYER    
+layer {
+          name: "accuracy"
+          type: "Accuracy"
+          bottom: "fc5"
+          bottom: "label"
+          top: "accuracy"     
+          
+           include {
+               phase: 1
+           }
+}
